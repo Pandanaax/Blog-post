@@ -1,15 +1,19 @@
 <template>
   <div>
-    <h1>Blog Posts</h1>
+    <h1 class="pa-2 d-flex justify-center">Blog Posts</h1>
     <v-container>
       <v-row>
         <v-col v-for="post in posts" :key="post.id" cols="12" sm="6" md="4">
-          <v-card >
+          <v-img
+            src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+            height="200px"
+            cover/>
+          <v-card>
             <v-card-title>{{ post.title }}</v-card-title>
             <v-card-text>{{ post.body }}</v-card-text>
             <v-card-actions>
-              <v-btn @click="editPost(post.id)" label="Edit" color="primary"> Modifier/Ajouter </v-btn>
-              <v-btn @click="deletePost(post.id)" label="Delete" color="#E91E63"> Supprimer </v-btn>
+              <v-btn @click="editPost(post.id)" label="Edit" color="primary">Modifier/Ajouter</v-btn>
+              <v-btn @click="deletePost(post.id)" label="Delete" color="#E91E63">Supprimer</v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
@@ -20,7 +24,7 @@
 
 <script>
 import axios from 'axios';
-import { useStore } from 'vuex'; // Importez useStore pour accéder au store Vuex
+import { useStore } from 'vuex'; // Import useStore for access in store Vuex
 
 export default {
   computed: {
@@ -35,7 +39,7 @@ export default {
     async deletePost(postId) {
       try {
         await axios.delete(`https://jsonplaceholder.typicode.com/posts/${postId}`);
-        // Utilisez le store Vuex pour supprimer le post
+        // Use  store Vuex for delete post
         const store = useStore();
         store.commit('deletePost', postId);
       } catch (error) {

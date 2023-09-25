@@ -13,7 +13,7 @@ export default {
   name: 'App',
   methods: {
     handlePostUpdated(updatedPost) {
-      // Mettez à jour la liste des posts dans le store Vuex lorsque le post est mis à jour
+      // MAJ list of post in vuex store when post is maj
       const store = useStore();
       store.commit('updatePost', {
         postId: updatedPost.id,
@@ -21,18 +21,18 @@ export default {
       });
     },
     handlePostDeleted(postId) {
-      // Supprimez le post de la liste des posts dans le store Vuex lorsque le post est supprimé
+      // delete post in list of post in vuex store when post is delete
       const store = useStore();
       store.commit('deletePost', postId);
     },
     handlePostAdded(newPost) {
-      // Ajoutez le nouveau post à la liste des posts dans le store Vuex lorsque le post est ajouté
+      // Add new post in list of post in vuex store when is add
       const store = useStore();
       store.commit('addPost', newPost);
     },
   },
   created() {
-    // Chargez les posts depuis le serveur ou le cache ici
+    // Charge post since serveur
     const store = useStore();
     store.dispatch('fetchPosts');
   },

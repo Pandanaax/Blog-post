@@ -1,14 +1,21 @@
 <template>
-  <div>
-    <h2>{{ formTitle }}</h2>
-    <form @submit.prevent="onclick ? updatePost() : addPost()">
-      <v-text-field v-model="formData.title" label="Titre"></v-text-field>
-      <v-textarea v-model="formData.body" label="Contenu du post"></v-textarea>
-      <v-btn type="submit" color="primary" @click="addPost">Ajouter</v-btn>
-      <v-btn type="button" color="primary" @click="updatePost">Modifier</v-btn>
-    </form>
+  <div class="text-center">
+    <h2>Ajout ou Modification d'un poste</h2>
+    <v-container>
+      <v-row justify="center">
+        <v-col cols="12" sm="8" md="6">
+      <form @submit.prevent="onclick ? updatePost() : addPost()">
+        <v-text-field v-model="formData.title" label="Titre" ></v-text-field>
+        <v-textarea v-model="formData.body" label="Contenu du post"></v-textarea>
+        <v-btn type="submit" color="primary" @click="addPost" class="mr-4">Ajouter</v-btn>
+        <v-btn type="button" color="secondary" @click="updatePost">Modifier</v-btn>
+      </form>
+      </v-col>
+      </v-row>
+      </v-container>
   </div>
 </template>
+
 
 <script>
 import axios from 'axios';
@@ -29,8 +36,8 @@ export default {
   data() {
     return {
       formData: {
-        title: '', // Titre du post
-        body: '', // Contenu du post
+        title: '', // Title of post
+        body: '', //  Body of post
       },
     };
   },
@@ -38,29 +45,29 @@ export default {
     post: {
       handler(newPost) {
         if (newPost) {
-          // Mettre à jour les données du formulaire lorsque le post change (pour la modification)
+          // Maj form
           this.formData.title = newPost.title;
           this.formData.body = newPost.body;
         } else {
-          // Réinitialiser le formulaire lorsque le post est vide (nouvel ajout)
+          // Reset form when post is empty
           this.clearForm();
         }
       },
-      immediate: true, // Déclencher la mise à jour initiale
+      immediate: true, // Trigger initial update
     },
   },
   methods: {
     async addPost() {
-      // Créez un objet post à partir des données du formulaire
+      // Create a post object from the form data
       const post = {
         title: this.formData.title,
         body: this.formData.body,
       };
-      // Utilisez axios.post pour ajouter un nouveau post
+      // Use axios.post for add new post
       const response = await axios.post(`https://jsonplaceholder.typicode.com/posts`, post);
-      // Mettez à jour l'état partagé en utilisant le store Vuex en appelant la mutation 'addPost'
+      // MAJ state share in use Vuex store with addPost
       this.$store.commit('addPost', response.data);
-      // Réinitialisez le formulaire
+      // Reset form
       this.$router.push('/');
     },
     
@@ -73,20 +80,20 @@ export default {
       try {
         await axios.put(`https://jsonplaceholder.typicode.com/posts/${this.id}`, post);
 
-        // Utilisez commit pour appeler la mutation "updatePost" dans le store Vuex
+        // Use commit for call updatePost in vuex store 
         this.$store.dispatch('updatePost', { postId: this.id, updatedPost: post });
 
-        // Émettez un événement personnalisé pour indiquer que le post a été mis à jour
+        // Evenement post maj
         emitter.emit('post-updated', post);
 
-        // Réinitialisez le formulaire
+        // Reset form
         this.$router.push('/');
       } catch (error) {
         console.error('Erreur lors de la mise à jour du post :', error);
       }
     },
     clearForm() {
-      // Réinitialisez le formulaire
+      // Reset form
       this.formData.title = '';
       this.formData.body = '';
     },
